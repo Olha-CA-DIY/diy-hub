@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Custom Accounting CPA — DIY Hub</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --teal:#1D9E75;--teal-dark:#0F6E56;--teal-light:#E1F5EE;--teal-mid:#9FE1CB;
+  --yellow:#EF9F27;--yellow-light:#FAEEDA;--yellow-dark:#BA7517;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f4f7f6;color:#1a2e27;font-size:15px}
+
+/* Header */
+.hub-header{background:var(--teal-dark);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hub-brand{display:flex;align-items:center;gap:14px}
+.hub-logo{background:var(--yellow);color:#3a1800;font-size:10px;font-weight:700;padding:4px 8px;border-radius:5px;letter-spacing:0.3px;white-space:nowrap}
+.hub-name{color:#fff;font-size:15px;font-weight:600;line-height:1.3}
+.hub-certs{color:var(--teal-mid);font-size:10px;margin-top:1px}
+.hub-user{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.12);padding:6px 12px;border-radius:20px}
+.user-avatar{width:26px;height:26px;border-radius:50%;background:var(--yellow);color:#3a1800;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.hub-user span{color:#fff;font-size:12px}
+
+/* Top nav */
+.top-nav{background:#fff;border-bottom:1.5px solid #ddeee8;display:flex;overflow-x:auto;padding:0 8px}
+.top-nav::-webkit-scrollbar{height:3px}
+.top-nav::-webkit-scrollbar-thumb{background:var(--teal-mid);border-radius:2px}
+.nav-tab{display:flex;align-items:center;gap:7px;padding:13px 16px;font-size:13px;font-weight:500;color:#5a7a6e;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all 0.12s}
+.nav-tab:hover{color:var(--teal-dark);background:#f8fbf9}
+.nav-tab.active{color:var(--teal-dark);border-bottom:3px solid var(--teal-dark)}
+.nav-tab i{font-size:16px}
+
+/* Content area */
+.hub-content{padding:24px;max-width:960px;margin:0 auto}
+.page{display:none}
+.page.active{display:block}
+
+/* Section heading */
+.section-head{margin-bottom:20px}
+.section-head h1{font-size:20px;font-weight:600;color:#0F6E56}
+.section-head p{font-size:13px;color:#5a7a6e;margin-top:4px}
+
+/* Welcome banner */
+.welcome-banner{background:var(--teal-dark);border-radius:12px;padding:20px 24px;color:#fff;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.welcome-banner h2{font-size:17px;font-weight:600}
+.welcome-banner p{font-size:13px;color:rgba(255,255,255,0.8);margin-top:3px}
+.savings-pill{background:var(--yellow);color:#3a1800;font-size:12px;font-weight:700;padding:8px 16px;border-radius:20px;white-space:nowrap}
+
+/* Stats */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:20px}
+.stat-card{background:#fff;border:1px solid #ddeee8;border-radius:10px;padding:14px;text-align:center}
+.stat-card .val{font-size:22px;font-weight:600;color:var(--teal-dark)}
+.stat-card .lbl{font-size:11px;color:#7a9e8e;margin-top:3px}
+.stat-card.yellow .val{color:var(--yellow-dark)}
+
+/* Cards */
+.card{background:#fff;border:1px solid #ddeee8;border-radius:12px;padding:18px;margin-bottom:16px}
+.card h2{font-size:14px;font-weight:600;color:#0F6E56;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+
+/* Checklist */
+.checklist-item{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid #f0f7f4;font-size:13px}
+.checklist-item:last-child{border-bottom:none}
+.check-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px}
+.check-icon.done{background:var(--teal-light);color:var(--teal-dark)}
+.check-icon.todo{background:#f0f7f4;border:1.5px dashed #aaccbb}
+.check-icon.active{background:var(--yellow-light);color:var(--yellow-dark)}
+.step-label{flex:1;color:#1a2e27}
+.step-badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500;white-space:nowrap}
+.step-badge.done-b{background:var(--teal-light);color:var(--teal-dark)}
+.step-badge.active-b{background:var(--yellow-light);color:var(--yellow-dark)}
+.step-badge.todo-b{background:#f0f7f4;color:#7a9e8e}
+
+/* Sessions */
+.session-row{display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid #f0f7f4}
+.session-row:last-child{border-bottom:none}
+.session-date{width:42px;height:42px;border-radius:8px;background:var(--teal-light);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.session-date .mo{font-size:9px;font-weight:600;color:var(--teal-dark);text-transform:uppercase}
+.session-date .dy{font-size:16px;font-weight:700;color:var(--teal-dark);line-height:1}
+.session-info{flex:1}
+.session-info .s-title{font-size:13px;font-weight:500}
+.session-info .s-sub{font-size:11px;color:#7a9e8e;margin-top:2px}
+.btn-join{background:var(--teal-dark);color:#fff;border:none;padding:6px 14px;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer}
+.btn-join:hover{background:var(--teal)}
+
+/* Referral */
+.referral-card{background:var(--yellow-light);border:1.5px solid #f0c878;border-radius:12px;padding:16px;display:flex;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+.referral-card i{font-size:26px;color:var(--yellow-dark);flex-shrink:0}
+.referral-card .r-title{font-size:13.5px;font-weight:600;color:#4a2800}
+.referral-card .r-desc{font-size:12px;color:#7a5200;margin-top:2px}
+.btn-ref{background:var(--yellow-dark);color:#fff;border:none;padding:7px 14px;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap}
+
+/* Resource library */
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.filter-btn{padding:5px 14px;border-radius:20px;border:1.5px solid #cce5d8;background:#fff;font-size:12px;color:#3a6a56;cursor:pointer;font-weight:500;transition:all 0.12s}
+.filter-btn.active,.filter-btn:hover{background:var(--teal-dark);color:#fff;border-color:var(--teal-dark)}
+.resources-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:12px}
+.resource-card{background:#fff;border:1px solid #ddeee8;border-radius:10px;padding:14px;cursor:pointer;transition:border-color 0.12s}
+.resource-card:hover{border-color:var(--teal-mid)}
+.res-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:9px;font-size:18px}
+.res-icon.tax{background:var(--teal-light);color:var(--teal-dark)}
+.res-icon.book{background:var(--yellow-light);color:var(--yellow-dark)}
+.res-icon.comp{background:#E6F1FB;color:#185FA5}
+.res-icon.pay{background:#FBEAF0;color:#993556}
+.resource-card h3{font-size:12.5px;font-weight:600;color:#1a2e27;margin-bottom:3px}
+.resource-card p{font-size:11px;color:#7a9e8e;line-height:1.5}
+.res-type{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:500;margin-top:7px;padding:2px 8px;border-radius:20px}
+.res-type.video{background:#FBEAF0;color:#993556}
+.res-type.guide{background:var(--teal-light);color:var(--teal-dark)}
+.res-type.doc{background:#E6F1FB;color:#185FA5}
+.res-type.template{background:var(--yellow-light);color:var(--yellow-dark)}
+
+/* Tools */
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.tool-card{background:#fff;border:1px solid #ddeee8;border-radius:10px;padding:18px;cursor:pointer;transition:border-color 0.12s}
+.tool-card:hover{border-color:var(--teal-mid)}
+.tool-icon{font-size:24px;color:var(--teal-dark);margin-bottom:9px}
+.tool-card h3{font-size:13px;font-weight:600;color:#1a2e27;margin-bottom:4px}
+.tool-card p{font-size:11.5px;color:#7a9e8e;line-height:1.5}
+.tool-badge{display:inline-block;margin-top:9px;font-size:10px;font-weight:600;padding:2px 9px;border-radius:20px}
+.tool-badge.included{background:var(--teal-light);color:var(--teal-dark)}
+.tool-badge.addon{background:var(--yellow-light);color:var(--yellow-dark)}
+
+/* Scheduler */
+.session-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.sess-type{border:1.5px solid #cce5d8;border-radius:9px;padding:13px;cursor:pointer;transition:all 0.12s}
+.sess-type:hover,.sess-type.sel{border-color:var(--teal-dark);background:var(--teal-light)}
+.sess-type .t{font-size:13px;font-weight:600;color:#1a2e27}
+.sess-type .d{font-size:11px;color:#7a9e8e;margin-top:2px}
+.sess-type .p{font-size:12px;font-weight:600;color:var(--teal-dark);margin-top:5px}
+.btn-primary{background:var(--teal-dark);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;width:100%}
+.btn-primary:hover{background:var(--teal)}
+.addon-note{font-size:11.5px;color:#7a9e8e;text-align:center;margin-top:8px}
+
+/* Settings */
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #f0f7f4;font-size:13px}
+.settings-row:last-child{border-bottom:none}
+.settings-row .lbl{color:#7a9e8e}
+.settings-row .val{font-weight:500;color:#1a2e27}
+
+/* Progress bar */
+.prog-bar-wrap{background:#f0f7f4;border-radius:20px;height:8px;margin:10px 0 4px;overflow:hidden}
+.prog-bar{background:var(--teal-dark);height:8px;border-radius:20px;transition:width 0.4s}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="hub-header">
+  <div class="hub-brand">
+    <div class="hub-logo">CERTIFIED CPA</div>
+    <div>
+      <div class="hub-name">Custom Accounting CPA</div>
+      <div class="hub-certs">Certified Tax Coach · Certified Tax Planner</div>
+    </div>
+  </div>
+  <div class="hub-user">
+    <div class="user-avatar">JD</div>
+    <span>Jane Doe</span>
+    <span style="background:var(--yellow);color:#3a1800;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:4px">DIY Beta</span>
+  </div>
+</div>
+
+<!-- Top Nav -->
+<div class="top-nav">
+  <div class="nav-tab active" onclick="showPage('dashboard',this)"><i class="ti ti-layout-dashboard"></i>Dashboard</div>
+  <div class="nav-tab" onclick="showPage('library',this)"><i class="ti ti-books"></i>Resource Library</div>
+  <div class="nav-tab" onclick="showPage('tools',this)"><i class="ti ti-calculator"></i>Tax Planning Tools</div>
+  <div class="nav-tab" onclick="showPage('scheduler',this)"><i class="ti ti-calendar"></i>Session Scheduler</div>
+  <div class="nav-tab" onclick="showPage('progress',this)"><i class="ti ti-checklist"></i>My Progress</div>
+  <div class="nav-tab" onclick="showPage('settings',this)"><i class="ti ti-settings"></i>Settings</div>
+</div>
+
+<!-- Content -->
+<div class="hub-content">
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <div class="welcome-banner">
+      <div>
+        <h2>Welcome back, Jane</h2>
+        <p>Your next CPA group session is June 10 — you're on track.</p>
+      </div>
+      <div class="savings-pill">$2,019,302 saved for clients in 2025</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card"><div class="val">3</div><div class="lbl">Resources accessed</div></div>
+      <div class="stat-card yellow"><div class="val">2</div><div class="lbl">Sessions attended</div></div>
+      <div class="stat-card"><div class="val">5 / 8</div><div class="lbl">Onboarding steps</div></div>
+      <div class="stat-card yellow"><div class="val">Jun 10</div><div class="lbl">Next session</div></div>
+    </div>
+
+    <div class="referral-card">
+      <i class="ti ti-gift" aria-hidden="true"></i>
+      <div style="flex:1">
+        <div class="r-title">Refer a friend — get 1 month free</div>
+        <div class="r-desc">When a referred friend signs up, your next month is on us.</div>
+      </div>
+      <button class="btn-ref">Copy referral link</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;flex-wrap:wrap">
+      <div class="card">
+        <h2><i class="ti ti-checklist" aria-hidden="true"></i>Onboarding checklist</h2>
+        <div class="prog-bar-wrap"><div class="prog-bar" style="width:63%"></div></div>
+        <p style="font-size:11px;color:#7a9e8e;margin-bottom:10px">5 of 8 steps complete</p>
+        <div class="checklist-item"><div class="check-icon done"><i class="ti ti-check"></i></div><span class="step-label">Sign up & confirm membership</span><span class="step-badge done-b">Done</span></div>
+        <div class="checklist-item"><div class="check-icon done"><i class="ti ti-check"></i></div><span class="step-label">Complete intake form</span><span class="step-badge done-b">Done</span></div>
+        <div class="checklist-item"><div class="check-icon done"><i class="ti ti-check"></i></div><span class="step-label">QuickBooks setup</span><span class="step-badge done-b">Done</span></div>
+        <div class="checklist-item"><div class="check-icon done"><i class="ti ti-check"></i></div><span class="step-label">First group CPA session</span><span class="step-badge done-b">Done</span></div>
+        <div class="checklist-item"><div class="check-icon done"><i class="ti ti-check"></i></div><span class="step-label">Download tax planning framework</span><span class="step-badge done-b">Done</span></div>
+        <div class="checklist-item"><div class="check-icon active"><i class="ti ti-clock" style="font-size:11px"></i></div><span class="step-label">Review Chart of Accounts</span><span class="step-badge active-b">In progress</span></div>
+        <div class="checklist-item"><div class="check-icon todo"></div><span class="step-label">Schedule comp study</span><span class="step-badge todo-b">To do</span></div>
+        <div class="checklist-item"><div class="check-icon todo"></div><span class="step-label">Review full resource library</span><span class="step-badge todo-b">To do</span></div>
+      </div>
+      <div class="card">
+        <h2><i class="ti ti-calendar" aria-hidden="true"></i>Upcoming sessions</h2>
+        <div class="session-row">
+          <div class="session-date"><div class="mo">Jun</div><div class="dy">10</div></div>
+          <div class="session-info"><div class="s-title">CPA Group Advisory — Tax Q&A</div><div class="s-sub">60 min · Zoom · Monthly</div></div>
+          <button class="btn-join">Join</button>
+        </div>
+        <div class="session-row">
+          <div class="session-date"><div class="mo">Jun</div><div class="dy">17</div></div>
+          <div class="session-info"><div class="s-title">Bookkeeping Group Session</div><div class="s-sub">30–45 min · Zoom · Monthly</div></div>
+          <button class="btn-join">Join</button>
+        </div>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid #f0f7f4">
+          <p style="font-size:12px;color:#5a7a6e;font-weight:500;margin-bottom:6px">Need 1-on-1 time?</p>
+          <button class="btn-primary" onclick="showPage('scheduler',document.querySelectorAll('.nav-tab')[3])">Book a session</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESOURCE LIBRARY -->
+  <div class="page" id="page-library">
+    <div class="section-head">
+      <h1>Resource library</h1>
+      <p>All your guides, videos, templates and documents — organized by topic.</p>
+    </div>
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterRes('all',this)">All resources</button>
+      <button class="filter-btn" onclick="filterRes('tax',this)">Tax planning</button>
+      <button class="filter-btn" onclick="filterRes('book',this)">Bookkeeping</button>
+      <button class="filter-btn" onclick="filterRes('comp',this)">Compliance</button>
+      <button class="filter-btn" onclick="filterRes('pay',this)">Payroll</button>
+    </div>
+    <div class="resources-grid" id="res-grid">
+      <div class="resource-card" data-cat="tax"><div class="res-icon tax"><i class="ti ti-file-text" aria-hidden="true"></i></div><h3>Tax reduction framework</h3><p>Step-by-step guide to our proven tax planning methodology.</p><span class="res-type guide"><i class="ti ti-file"></i> Guide</span></div>
+      <div class="resource-card" data-cat="tax"><div class="res-icon tax"><i class="ti ti-player-play" aria-hidden="true"></i></div><h3>S-Corp tax strategies</h3><p>Video walkthrough of S-Corp salary optimization & savings.</p><span class="res-type video"><i class="ti ti-player-play"></i> Video</span></div>
+      <div class="resource-card" data-cat="tax"><div class="res-icon tax"><i class="ti ti-table" aria-hidden="true"></i></div><h3>Tax reduction template</h3><p>Fillable workbook to map your potential tax savings areas.</p><span class="res-type template"><i class="ti ti-table"></i> Template</span></div>
+      <div class="resource-card" data-cat="book"><div class="res-icon book"><i class="ti ti-book" aria-hidden="true"></i></div><h3>QuickBooks setup guide</h3><p>Full walkthrough from account creation to bank feed setup.</p><span class="res-type guide"><i class="ti ti-file"></i> Guide</span></div>
+      <div class="resource-card" data-cat="book"><div class="res-icon book"><i class="ti ti-list-check" aria-hidden="true"></i></div><h3>Monthly close checklist</h3><p>Never miss a step when closing your books each month.</p><span class="res-type template"><i class="ti ti-table"></i> Template</span></div>
+      <div class="resource-card" data-cat="book"><div class="res-icon book"><i class="ti ti-player-play" aria-hidden="true"></i></div><h3>Bank feed setup walkthrough</h3><p>Video: connect and reconcile your bank accounts in QBO.</p><span class="res-type video"><i class="ti ti-player-play"></i> Video</span></div>
+      <div class="resource-card" data-cat="comp"><div class="res-icon comp"><i class="ti ti-world" aria-hidden="true"></i></div><h3>Multi-state compliance guide</h3><p>Nexus rules, registration requirements & key deadlines.</p><span class="res-type doc"><i class="ti ti-file-text"></i> Document</span></div>
+      <div class="resource-card" data-cat="comp"><div class="res-icon comp"><i class="ti ti-receipt-tax" aria-hidden="true"></i></div><h3>Sales tax overview</h3><p>When you owe, how to collect, and how to file.</p><span class="res-type guide"><i class="ti ti-file"></i> Guide</span></div>
+      <div class="resource-card" data-cat="pay"><div class="res-icon pay"><i class="ti ti-user-dollar" aria-hidden="true"></i></div><h3>Payroll tax basics</h3><p>Owner payroll, FICA, and estimated tax payment guide.</p><span class="res-type guide"><i class="ti ti-file"></i> Guide</span></div>
+      <div class="resource-card" data-cat="pay"><div class="res-icon pay"><i class="ti ti-player-play" aria-hidden="true"></i></div><h3>Reasonable compensation explained</h3><p>Video: what it is, why it matters, and how we study yours.</p><span class="res-type video"><i class="ti ti-player-play"></i> Video</span></div>
+    </div>
+  </div>
+
+  <!-- TAX PLANNING TOOLS -->
+  <div class="page" id="page-tools">
+    <div class="section-head">
+      <h1>Tax planning tools</h1>
+      <p>Expert-built templates and frameworks — yours to implement with DIY guidance.</p>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card"><div class="tool-icon"><i class="ti ti-file-analytics" aria-hidden="true"></i></div><h3>Tax reduction planner</h3><p>Core strategy framework for identifying and implementing legal tax savings.</p><span class="tool-badge included">Included</span></div>
+      <div class="tool-card"><div class="tool-icon"><i class="ti ti-scale" aria-hidden="true"></i></div><h3>Reasonable compensation study</h3><p>Biennial IRS-compliant owner salary analysis with written report (5–10 pages).</p><span class="tool-badge included">Included biannually</span></div>
+      <div class="tool-card"><div class="tool-icon"><i class="ti ti-table-column" aria-hidden="true"></i></div><h3>Chart of accounts template</h3><p>Pre-built COA ready to import directly into QuickBooks.</p><span class="tool-badge included">Included</span></div>
+      <div class="tool-card"><div class="tool-icon"><i class="ti ti-report-money" aria-hidden="true"></i></div><h3>Estimated tax calculator</h3><p>Estimate quarterly payments based on projected income and deductions.</p><span class="tool-badge included">Included</span></div>
+      <div class="tool-card" style="border:2px dashed #cce5d8"><div class="tool-icon"><i class="ti ti-star" aria-hidden="true"></i></div><h3>Custom tax reduction plan</h3><p>Full CPA-prepared strategy — same as 1-on-1 clients. Valued at $5,000.</p><span class="tool-badge addon">Add-on · $2,500</span></div>
+      <div class="tool-card" style="border:2px dashed #cce5d8"><div class="tool-icon"><i class="ti ti-user" aria-hidden="true"></i></div><h3>1-on-1 CPA consulting</h3><p>Book direct time with your CPA advisor for personalized guidance.</p><span class="tool-badge addon">Add-on · from $300</span></div>
+    </div>
+  </div>
+
+  <!-- SCHEDULER -->
+  <div class="page" id="page-scheduler">
+    <div class="section-head">
+      <h1>Session scheduler</h1>
+      <p>Register for your monthly group sessions or book optional 1-on-1 support.</p>
+    </div>
+    <div class="card" style="max-width:560px">
+      <h2><i class="ti ti-users" aria-hidden="true"></i>Monthly group sessions — included</h2>
+      <div class="session-row">
+        <div class="session-date"><div class="mo">Jun</div><div class="dy">10</div></div>
+        <div class="session-info"><div class="s-title">CPA Group Advisory — Tax Reduction Q&A</div><div class="s-sub">60 min · Zoom · Led by CPA</div></div>
+        <button class="btn-join">Register</button>
+      </div>
+      <div class="session-row">
+        <div class="session-date"><div class="mo">Jun</div><div class="dy">17</div></div>
+        <div class="session-info"><div class="s-title">Bookkeeping Group Session</div><div class="s-sub">30–45 min · Zoom · Led by Senior Accountant</div></div>
+        <button class="btn-join">Register</button>
+      </div>
+    </div>
+    <div class="card" style="max-width:560px">
+      <h2><i class="ti ti-user" aria-hidden="true"></i>Book 1-on-1 support (add-on)</h2>
+      <p style="font-size:12.5px;color:#7a9e8e;margin-bottom:14px">Select a session type, then choose a time that works for you.</p>
+      <div class="session-type-grid">
+        <div class="sess-type sel" id="st1" onclick="selType('st1')"><div class="t">CPA consulting</div><div class="d">Up to 45–60 min · CPA advisor</div><div class="p">From $300</div></div>
+        <div class="sess-type" id="st2" onclick="selType('st2')"><div class="t">Bookkeeping support</div><div class="d">30 or 60 min · Senior Accountant</div><div class="p">From $100</div></div>
+      </div>
+      <button class="btn-primary">Schedule session <i class="ti ti-arrow-right" style="font-size:13px;vertical-align:-1px"></i></button>
+      <div class="addon-note">Add-on sessions billed separately at the rates above.</div>
+    </div>
+  </div>
+
+  <!-- MY PROGRESS -->
+  <div class="page" id="page-progress">
+    <div class="section-head">
+      <h1>My progress</h1>
+      <p>Track your onboarding milestones and activity at a glance.</p>
+    </div>
+    <div class="stats-grid" style="margin-bottom:20px">
+      <div class="stat-card"><div class="val">63%</div><div class="lbl">Onboarding complete</div></div>
+      <div class="stat-card yellow"><div class="val">2</div><div class="lbl">Sessions attended</div></div>
+      <div class="stat-card"><div class="val">3</div><div class="lbl">Resources accessed</div></div>
+      <div class="stat-card yellow"><div class="val">4 mo</div><div class="lbl">Member since</div></div>
+    </div>
+    <div class="card">
+      <h2><i class="ti ti-checklist" aria-hidden="true"></i>Full onboarding checklist</h2>
+      <div class="prog-bar-wrap"><div class="prog-bar" style="width:63%"></div></div>
+      <p style="font-size:11px;color:#7a9e8e;margin-bottom:10px">5 of 8 steps complete</p>
+      <div class="checklist-item"><div class="check-icon done"><i class="ti ti-check"></i></div><span class="step-label">Sign up & confirm membership</span><span class="step-badge done-b">Done</span></div>
+      <div class="checklist-item"><div class="check-icon done"><i class="ti ti-check"></i></div><span class="step-label">Complete intake form</span><span class="step-badge done-b">Done</span></div>
+      <div class="checklist-item"><div class="check-icon done"><i class="ti ti-check"></i></div><span class="step-label">Set up QuickBooks with our guide</span><span class="step-badge done-b">Done</span></div>
+      <div class="checklist-item"><div class="check-icon done"><i class="ti ti-check"></i></div><span class="step-label">Attend first group CPA session</span><span class="step-badge done-b">Done</span></div>
+      <div class="checklist-item"><div class="check-icon done"><i class="ti ti-check"></i></div><span class="step-label">Download tax planning framework</span><span class="step-badge done-b">Done</span></div>
+      <div class="checklist-item"><div class="check-icon active"><i class="ti ti-clock" style="font-size:11px"></i></div><span class="step-label">Review Chart of Accounts template</span><span class="step-badge active-b">In progress</span></div>
+      <div class="checklist-item"><div class="check-icon todo"></div><span class="step-label">Schedule Reasonable Compensation study</span><span class="step-badge todo-b">To do</span></div>
+      <div class="checklist-item"><div class="check-icon todo"></div><span class="step-label">Review full resource library</span><span class="step-badge todo-b">To do</span></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="page" id="page-settings">
+    <div class="section-head">
+      <h1>Settings</h1>
+      <p>Your account and subscription details.</p>
+    </div>
+    <div class="card" style="max-width:480px">
+      <h2><i class="ti ti-credit-card" aria-hidden="true"></i>Subscription</h2>
+      <div class="settings-row"><span class="lbl">Plan</span><span class="val">DIY Package — Beta Early Access</span></div>
+      <div class="settings-row"><span class="lbl">Monthly rate</span><span class="val" style="color:var(--teal-dark);font-weight:600">$225/month (locked in)</span></div>
+      <div class="settings-row"><span class="lbl">Business tax return</span><span class="step-badge done-b">Included</span></div>
+      <div class="settings-row"><span class="lbl">Personal tax prep</span><span class="val" style="color:#7a9e8e;font-size:12px">Billed separately</span></div>
+      <div class="settings-row"><span class="lbl">Commitment</span><span class="val">Cancel anytime</span></div>
+    </div>
+    <div class="card" style="max-width:480px;margin-top:0">
+      <h2><i class="ti ti-user" aria-hidden="true"></i>Profile</h2>
+      <div class="settings-row"><span class="lbl">Name</span><span class="val">Jane Doe</span></div>
+      <div class="settings-row"><span class="lbl">Business</span><span class="val">Doe Enterprises LLC</span></div>
+      <div class="settings-row"><span class="lbl">Email</span><span class="val">jane@doeenterprises.com</span></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+}
+function filterRes(cat,el){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.resource-card').forEach(c=>{
+    c.style.display=(cat==='all'||c.dataset.cat===cat)?'block':'none';
+  });
+}
+function selType(id){
+  document.querySelectorAll('.sess-type').forEach(s=>s.classList.remove('sel'));
+  document.getElementById(id).classList.add('sel');
+}
+</script>
+</body>
+</html>
